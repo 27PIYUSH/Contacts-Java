@@ -2,9 +2,7 @@ package Service;
 
 import Entity.Contact;
 import Repo.ContactRepository;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
+import java.util.*;
 
 public class ContactService {
     private ContactRepository repository;
@@ -54,7 +52,21 @@ public class ContactService {
             return;
         }
 
-        Collections.sort(contacts, Comparator.comparing(Contact::getName, String.CASE_INSENSITIVE_ORDER));
-        contacts.forEach(System.out::println);
+        // Basic bubble sort implementation
+        for (int i = 0; i < contacts.size() - 1; i++) {
+            for (int j = 0; j < contacts.size() - i - 1; j++) {
+                if (contacts.get(j).getName().compareToIgnoreCase(contacts.get(j + 1).getName()) > 0) {
+                    // Swap contacts
+                    Contact temp = contacts.get(j);
+                    contacts.set(j, contacts.get(j + 1));
+                    contacts.set(j + 1, temp);
+                }
+            }
+        }
+
+        // Basic for loop for printing
+        for (Contact contact : contacts) {
+            System.out.println(contact);
+        }
     }
 }

@@ -1,9 +1,7 @@
 package Repo;
 
 import Entity.Contact;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
+import java.util.*;
 
 public class ContactRepository {
     private ArrayList<Contact> contacts;
@@ -17,15 +15,22 @@ public class ContactRepository {
     }
 
     public boolean delete(String name) {
-        return contacts.removeIf(contact -> 
-            contact.getName().equalsIgnoreCase(name));
+        for (int i = 0; i < contacts.size(); i++) {
+            if (contacts.get(i).getName().equalsIgnoreCase(name)) {
+                contacts.remove(i);
+                return true;
+            }
+        }
+        return false;
     }
 
     public Contact findByName(String name) {
-        return contacts.stream()
-            .filter(contact -> contact.getName().equalsIgnoreCase(name))
-            .findFirst()
-            .orElse(null);
+        for (Contact contact : contacts) {
+            if (contact.getName().equalsIgnoreCase(name)) {
+                return contact;
+            }
+        }
+        return null;
     }
 
     public ArrayList<Contact> findAll() {
