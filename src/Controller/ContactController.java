@@ -2,11 +2,8 @@ package Controller;
 
 import Service.ContactService;
 import java.util.Scanner;
-import java.util.regex.Pattern;
 
 public class ContactController {
-    private static final String EMAIL_PATTERN = 
-        "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
     private ContactService service;
     private Scanner scanner;
 
@@ -16,7 +13,17 @@ public class ContactController {
     }
 
     private boolean isValidPhoneNumber(String phone) {
-        return phone.matches("\\d+") && phone.length() >= 10;
+        if (phone == null || phone.trim().isEmpty()) {
+            return false;
+        }
+        
+        for (char c : phone.toCharArray()) {
+            if (c < '0' || c > '9') {
+                return false;
+            }
+        }
+        
+        return phone.length() >= 10;
     }
 
     private boolean isValidEmail(String email) {
@@ -24,7 +31,12 @@ public class ContactController {
             return false;
         }
         
-        if (!email.contains("@") || !email.contains(".")) {
+
+        int atIndex = email.indexOf('@');
+        int lastDotIndex = email.lastIndexOf('.');
+        
+        
+        if (atIndex <= 0 || lastDotIndex <= atIndex + 1 || lastDotIndex == email.length() - 1) {
             return false;
         }
         
@@ -37,7 +49,7 @@ public class ContactController {
             }
         }
         
-        return hasValidTLD && Pattern.compile(EMAIL_PATTERN).matcher(email).matches();
+        return hasValidTLD;
     }
 
     public void start() {
